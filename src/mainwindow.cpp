@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 const QColor stateColorOFF("#FF4515");
 
