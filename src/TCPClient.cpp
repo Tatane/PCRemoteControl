@@ -18,25 +18,33 @@ TCPClient::~TCPClient()
 
 }
 
-void TCPClient::wakeUpComputer(QHostAddress targetIPv4, QString MacAdress)
+void TCPClient::wakeUpComputer(QString targetIPv4, QString MacAdress, quint16 port)
 {
     mTargetIPv4 = targetIPv4;
     mTargetMacAdresse = MacAdress;
 
     mSocket = new QTcpSocket();
+
+    QHostAddress adresseIP;
+    bool b = adresseIP.setAddress(targetIPv4);
+    QString temp("Parsing IP(%1) : %2 => %3");
+    temp = temp.arg(targetIPv4).arg(b?"Success":"Failure").arg(adresseIP.toString());
+    writeToConsole(temp);
+
     connect(mSocket, SIGNAL(connected()), this, SLOT(sendMagicPacket()));
 
-    mSocket->connectToHost(targetIPv4, PORT_WAL, QTcpSocket::ReadWrite);
+    mSocket->connectToHost(adresseIP, port, QTcpSocket::ReadWrite);
 }
 
 TCPClient::TCPClient()
-    : mTargetIPv4("0:0:0:0")
+    : mTargetIPv4("0.0.0.0")
     , mTargetMacAdresse("00:00:00:00:00:00")
 {
 }
 
 void TCPClient::sendMagicPacket()
 {
+    writeToConsole("Connected. Sending magic packet...");
     QByteArray trame;
 
     for(int i=0; i<6; ++i){
@@ -55,4 +63,5 @@ void TCPClient::sendMagicPacket()
     }
 
     int n = mSocket->write(trame.constData(), 102);
+    writeToConsole(QString("%1 octets écrits").arg(n));
 }

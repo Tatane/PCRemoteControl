@@ -11,7 +11,7 @@ public:
     static TCPClient * getInstance();
     virtual ~TCPClient();
 
-    void wakeUpComputer(QHostAddress targetIPv4, QString MacAdress);
+    void wakeUpComputer(QString targetIPv4, QString MacAdress, quint16 port);
 
 private:
     TCPClient();
@@ -21,6 +21,10 @@ private:
 
     QHostAddress mTargetIPv4;
     QString mTargetMacAdresse;
+
+signals:
+    void writeToConsole(QString);
+
 
 private slots:
     void sendMagicPacket();

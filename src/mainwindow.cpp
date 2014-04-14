@@ -33,10 +33,30 @@ MainWindow::MainWindow(QWidget *parent) :
     mLblState->setStyleSheet("border: 2px solid");
     setStateColor(true);
 
+
+    // Temporaire :
+    mTxtIP = new QLineEdit("90.50.99.30", this);
+    mLayout->addWidget(mTxtIP);
+
+    mTxtMacAdress = new QLineEdit("6c:f0:49:7c:ac:3c", this);
+    mLayout->addWidget(mTxtMacAdress);
+
+    mTxtPort = new QLineEdit("45000", this);
+    mLayout->addWidget(mTxtPort);
+
+    mTxtConsole = new QTextEdit(this);
+    mTxtConsole->setReadOnly(true);
+    mLayout->addWidget(mTxtConsole);
+    // Temporaire (Fin)
+
     //mLayout->addStretch();
 
     initConnects();
 
+
+    // Client TCP :
+    mTcpClient = TCPClient::getInstance();
+    connect(mTcpClient, SIGNAL(writeToConsole(QString)), this, SLOT(writeToConsole(QString)));
 
 
 }
@@ -62,8 +82,7 @@ void MainWindow::initConnects()
 
 void MainWindow::onBtnWakeUp()
 {
-    mTcpClient = TCPClient::getInstance();
-    mTcpClient->wakeUpComputer(QHostAddress("90.50.99.30"), "6c:f0:49:7c:ac:3c");
+    mTcpClient->wakeUpComputer(mTxtIP->text(), mTxtMacAdress->text(), mTxtPort->text().toInt());
 }
 
 void MainWindow::onBtnTestIfReady()
@@ -79,4 +98,9 @@ void MainWindow::onBtnShutDown()
 void MainWindow::onBtnSettings()
 {
 
+}
+
+void MainWindow::writeToConsole(QString texte)
+{
+    mTxtConsole->append(texte);
 }

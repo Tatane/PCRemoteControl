@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QVBoxLayout>
-
+#include <QTextEdit>
+#include <QLineEdit>
 #include <QLabel>
 
 #include "TCPClient.h"
@@ -24,12 +25,20 @@ public:
 private:
     QVBoxLayout * mLayout;
 
+    // Temporaire (sera surement dans la fenetre Settings
+    QLineEdit * mTxtIP;
+    QLineEdit * mTxtMacAdress;
+    QLineEdit * mTxtPort;
+    // Temporaire (Fin)
+
     QPushButton * mBtnWakeUp;
     QPushButton * mBtnTestIfReady;
     QPushButton * mBtnShutDown;
     QPushButton * mBtnSettings;
 
     QLabel * mLblState;
+
+    QTextEdit * mTxtConsole;
 
     TCPClient * mTcpClient;
 
@@ -43,6 +52,7 @@ private slots:
     void onBtnTestIfReady();
     void onBtnShutDown();
     void onBtnSettings();
+    void writeToConsole(QString texte);
 };
 
 #endif // MAINWINDOW_H
